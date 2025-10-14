@@ -1,4 +1,4 @@
-package com.dsa.string;
+package com.dsa.string.basics;
 
 public class ReverseString {
     public static void main(String[] args) {

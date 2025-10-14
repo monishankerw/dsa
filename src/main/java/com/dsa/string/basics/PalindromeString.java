@@ -1,4 +1,4 @@
-package com.dsa.string;
+package com.dsa.string.basics;
 
 import java.util.stream.IntStream;
 
