@@ -3,7 +3,7 @@ package com.dsa.arrays.map.string;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
+//TODO: 4
 public class IndexOfFirstRepeatedChar {
     public static void main(String[] args) {
         String str = "programming";
@@ -13,19 +13,24 @@ public class IndexOfFirstRepeatedChar {
     }
 
     // ✅ Classic Approach
+    // ✅ Classic Approach using Map
     private static int indexOfFirstRepeatedChar(String str) {
         str = str.toLowerCase();
-        Set<Character> seen = new HashSet<>();
+        Map<Character, Boolean> map = new HashMap<>();
 
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
-            if (seen.contains(c)) {
-                return i; // first repeated character’s index
+
+            if (map.containsKey(c)) {
+                return i; // this is the first repeated character index
             }
-            seen.add(c);
+
+            map.put(c, true); // mark character as seen
         }
-        return -1; // no repeated character
+
+        return -1; // no repeated character found
     }
+
 
     // ✅ Java 8 Stream Approach (returns index)
     private static int indexOfFirstRepeatedCharJava8(String str) {
