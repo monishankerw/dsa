@@ -18,11 +18,13 @@ public class DuplicateWordsInAString {
     // ✅ Classic Approach
     private static void duplicateWordsClassic(String str) {
         str = str.toLowerCase().replaceAll("[^a-z\\s]", ""); // remove punctuation, normalize case
+        System.out.println(str);
         String[] words = str.split("\\s+");
-
+        System.out.println(Arrays.toString(words));
         Map<String, Integer> map = new LinkedHashMap<>();
         for (String word : words) {
             map.put(word, map.getOrDefault(word, 0) + 1);
+            System.out.println(map);
         }
 
         boolean found = false;

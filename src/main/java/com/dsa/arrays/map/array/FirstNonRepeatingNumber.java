@@ -25,8 +25,9 @@ public class FirstNonRepeatingNumber {
     }
 
     private static void firstNonRepeatingNumberJava8(int[] arr) {
-        Optional<Map.Entry<Integer, Long>> first = Arrays.stream(arr).boxed().collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()))
+        Optional<Map.Entry<Integer, Long>> first = Arrays.stream(arr).boxed().collect
+                        (Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()))
                 .entrySet().stream().filter(e -> e.getValue() == 1).findFirst();
-        System.out.println(first);
+              System.out.println(first);
     }
 }
