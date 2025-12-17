@@ -17,20 +17,21 @@ public class IndexOfFirstNonRepeatedChar {
         str = str.toLowerCase();
         Map<Character, Integer> map = new LinkedHashMap<>();
 
-        // Count frequency of each character
+        // Step 1: Count frequency
         for (char c : str.toCharArray()) {
             map.put(c, map.getOrDefault(c, 0) + 1);
         }
 
-        // Find the first character with frequency 1
-        for (int i = 0; i < str.length(); i++) {
-            if (map.get(str.charAt(i)) == 1) {
-                return i; // return its index
+        // Step 2: Find first character with frequency 1
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+            if (entry.getValue() == 1) {
+                return str.indexOf(entry.getKey());  // return the index, NOT the character
             }
         }
 
-        return -1; // if none found
+        return -1; // Not found
     }
+
 
     // ✅ Java 8 Stream Approach
     private static int indexOfFirstNonRepeatedCharJava8(String str) {

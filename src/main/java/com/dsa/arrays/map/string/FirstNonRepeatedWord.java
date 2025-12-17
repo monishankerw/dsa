@@ -16,6 +16,7 @@ public class FirstNonRepeatedWord {
     private static String firstNonRepeatedWord(String str) {
         // Normalize input (lowercase + remove punctuation)
         str = str.toLowerCase().replaceAll("[^a-z0-9\\s]", "");
+        System.out.println(str);
 
         String[] words = str.split("\\s+");
         Map<String, Integer> map = new LinkedHashMap<>(); // preserve insertion order
@@ -26,10 +27,9 @@ public class FirstNonRepeatedWord {
         }
 
         // Find first word with frequency 1
-        for (String word : words) {
-            if (map.get(word) == 1) {
-                return word; // ✅ Return immediately once found
-            }
+     for (Map.Entry<String,Integer>entry:map.entrySet()){
+         if(entry.getValue()==1)
+             return entry.getKey();
         }
 
         return "No non-repeated word found";

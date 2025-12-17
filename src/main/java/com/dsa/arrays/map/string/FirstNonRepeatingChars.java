@@ -21,6 +21,7 @@ public class FirstNonRepeatingChars {
         // Step 1: Count frequency of each character
         for (char c : str.toCharArray()) {
             map.put(c, map.getOrDefault(c, 0) + 1);
+            System.out.println(map);
         }
 
         // Step 2: Return first character with count == 1

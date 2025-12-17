@@ -3,8 +3,8 @@ package com.dsa.arrays.map.string;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-public class AllNonRepeatedCharc {
+//TODO:7
+public class AllNonRepeatedWords {
     public static void main(String[] args) {
         String str = "hello world java hello code world";
 
