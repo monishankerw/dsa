@@ -24,7 +24,7 @@ public class FreOccWords {
     }
 
     private static void freqOccWordsJava8(String text) {
-        Map<String, Integer> map = Arrays.stream(text.split("\\s+")).map(String::toLowerCase).collect(Collectors.toMap(Function.identity(), word -> 1, Integer::sum));
+        Map<String, Long> map = Arrays.stream(text.split("\\s+")).collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
         System.out.println(map);
     }
 

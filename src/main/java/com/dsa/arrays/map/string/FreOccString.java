@@ -1,5 +1,6 @@
 package com.dsa.arrays.map.string;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -27,9 +28,15 @@ public class FreOccString {
         System.out.println(map);
     }
     private static void freOccStringJava8(String str) {
-        Map<Character, Long> map = str.chars().mapToObj(c -> (char) c).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        Map<String, Long> map = Arrays.stream(str.split(""))
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.counting()
+                ));
+
         System.out.println(map);
     }
+
 /*
 ✔ 1. str.chars()
 

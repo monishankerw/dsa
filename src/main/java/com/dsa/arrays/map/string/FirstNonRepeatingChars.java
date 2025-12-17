@@ -1,5 +1,6 @@
 package com.dsa.arrays.map.string;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class FirstNonRepeatingChars {
     }
 
     private static Optional<String> firstNonRepeatingCharsJava8(String str) {
-        return str.chars().mapToObj(c -> (char) c).collect(Collectors.groupingBy(c -> c, LinkedHashMap::new, Collectors.counting())).entrySet()
+        return Arrays.stream(str.split("")).collect(Collectors.groupingBy(c -> c, LinkedHashMap::new, Collectors.counting())).entrySet()
                 .stream().filter(e -> e.getValue() == 1)
                 .map(e -> String.valueOf(e.getKey())).findFirst();
     }
