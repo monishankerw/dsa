@@ -1,4 +1,4 @@
-package com.dsa.arrays.map.string;
+package com.dsa.string.basics;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package com.dsa.arrays.map.string;
+package com.dsa.string.basics;
 
 public class LongestWordPalindrome {
 
