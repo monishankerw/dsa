@@ -27,17 +27,15 @@ public class DuplicateWordsInAString {
             System.out.println(map);
         }
 
-        boolean found = false;
+
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
             if (entry.getValue() > 1) {
                 System.out.println(entry.getKey() + " → " + entry.getValue());
-                found = true;
+
             }
         }
 
-        if (!found) {
-            System.out.println("No duplicate words found");
-        }
+
     }
 
     // ✅ Java 8 Stream Approach

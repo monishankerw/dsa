@@ -507,11 +507,12 @@ public class MapQuestion {
                     .map(Map.Entry::getKey).orElse(' ');
         }
     }
-    public static class MergeTwoSortedElements{
+
+    public static class MergeTwoSortedElements {
         public static void main(String[] args) {
-            int[]arr1={1,3,5,6};
-            int[]arr2={2,3,6,8};
-            mergeTwoSortedElements(arr1,arr2);
+            int[] arr1 = {1, 3, 5, 6};
+            int[] arr2 = {2, 3, 6, 8};
+            mergeTwoSortedElements(arr1, arr2);
             int[] result = mergeTwoSortedElementsJava8(arr1, arr2);
             System.out.println(Arrays.toString(result));
         }
@@ -547,6 +548,7 @@ public class MapQuestion {
         }
 
     }
+
     private static int[] mergeTwoSortedElementsJava8(int[] arr1, int[] arr2) {
 
         return IntStream.concat(Arrays.stream(arr1), Arrays.stream(arr2)) // join streams
