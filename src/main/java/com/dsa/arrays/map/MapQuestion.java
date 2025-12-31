@@ -81,6 +81,69 @@ public class MapQuestion {
         }
     }
 
+    public static class MaxOccurringCharacter {
+        public static void main(String[] args) {
+            String str = "programming";
+
+            char result = maxOccurringChar(str);
+            System.out.println("Maximum Occurring Character: " + result);
+        }
+
+        private static char maxOccurringChar(String str) {
+            Map<Character, Integer> map = new HashMap<>();
+
+            // Step 1: Count frequency
+            for (char ch : str.toCharArray()) {
+                map.put(ch, map.getOrDefault(ch, 0) + 1);
+            }
+
+            // Step 2: Find max occurring character
+            char maxChar = ' ';
+            int maxCount = 0;
+
+            for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+                if (entry.getValue() > maxCount) {
+                    maxCount = entry.getValue();
+                    maxChar = entry.getKey();
+                }
+            }
+            return maxChar;
+        }
+    }
+
+    public static class LongestRepeatingSubstringMap {
+
+        public static void main(String[] args) {
+            String str = "banana";
+
+            String result = longestRepeatingSubstring(str);
+            System.out.println("Longest Repeating Substring: " + result);
+        }
+
+        private static String longestRepeatingSubstring(String str) {
+            Map<String, Integer> map = new HashMap<>();
+            int n = str.length();
+
+            // Step 1: Generate all substrings
+            for (int i = 0; i < n; i++) {
+                for (int j = i + 1; j <= n; j++) {
+                    String sub = str.substring(i, j);
+                    map.put(sub, map.getOrDefault(sub, 0) + 1);
+                }
+            }
+
+            // Step 2: Find longest substring with freq > 1
+            String result = "";
+
+            for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                if (entry.getValue() > 1 && entry.getKey().length() > result.length()) {
+                    result = entry.getKey();
+                }
+            }
+            return result;
+        }
+    }
+
     public static class ElementAppearingExactlyKTime {
         public static void main(String[] args) {
             int[] arr = {1, 2, 2, 3, 3, 3};
@@ -232,7 +295,7 @@ public class MapQuestion {
             return "First rep";
         }
     }
-
+//Find First Non-Repeating Character
     public static class FirstNonRepeatedChars {
         public static void main(String[] args) {
             String str = "swiss";

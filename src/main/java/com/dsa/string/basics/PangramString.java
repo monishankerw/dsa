@@ -2,7 +2,7 @@ package com.dsa.string.basics;
 
 import java.util.HashSet;
 import java.util.Set;
-
+// TODO: A pangram is a sentence that contains all 26 English alphabets at least once.
 public class PangramString {
     //TODO: A Sentence that contains every letter of the english alphabet at least once.
     public static void main(String[] args) {
