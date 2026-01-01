@@ -495,7 +495,8 @@ public class DuplicateQuestion {
             return true;
         }
     }
-//TODO:18 Remove Consecutive Duplicates from String
+
+    //TODO:18 Remove Consecutive Duplicates from String
     /*
     Remove only adjacent duplicates, not all duplicates.
     Correct Approach: LinkedHashSet + Previous Character
@@ -534,6 +535,228 @@ Use LinkedHashSet to preserve insertion order
                 prev = curr;
             }
             return result.toString();
+        }
+    }
+
+
+    public static class StringProblemsUsingSet {
+
+        public static void main(String[] args) {
+
+            String sentence = "madam teachers malayalam level civic java madam";
+
+            System.out.println("Sentence : " + sentence);
+            System.out.println("--------------------------------");
+
+            // 1. Longest word
+            System.out.println("1. Longest Word : " + findLongestWord(sentence));
+
+            // 2. Smallest word
+            System.out.println("2. Smallest Word : " + findSmallestWord(sentence));
+
+            // 3. Replace word
+            System.out.println("3. Replace Word : " + replaceWord(sentence, "java", "python"));
+
+            // 4. Swap first and last word
+            System.out.println("4. Swap First & Last : " + swapFirstLastWord(sentence));
+
+            // 5. Sort characters alphabetically
+            System.out.println("5. Sorted Characters : " + sortCharacters("banana"));
+
+            // 6. Shortest distance between words
+            String[] words = sentence.split("\\s+");
+            System.out.println("6. Shortest Distance (madam, java) : " + shortestDistance(words, "madam", "java"));
+
+            // 7. Longest common prefix
+            String[] arr = {"flower", "flow", "flight"};
+            System.out.println("7. Longest Common Prefix : " + longestCommonPrefix(arr));
+
+            // 8. All permutations
+            System.out.println("8. Permutations of 'ABC' : " + findPermutations("ABC"));
+
+            // 9. Lexicographically largest substring
+            System.out.println("9. Largest Substring : " + largestSubstring("banana"));
+
+            // 10. Longest repeating substring
+            System.out.println("10. Longest Repeating Substring : " + longestRepeatingSubstring("banana"));
+        }
+
+        // 1️⃣ Find longest word
+        static String findLongestWord(String sentence) {
+            Set<String> set = new LinkedHashSet<>(Arrays.asList(sentence.split("\\s+")));
+            String longest = "";
+
+            for (String word : set) {
+                if (word.length() > longest.length()) {
+                    longest = word;
+                }
+            }
+            return longest;
+        }
+
+        // 2️⃣ Find smallest word
+        static String findSmallestWord(String sentence) {
+            Set<String> set = new LinkedHashSet<>(Arrays.asList(sentence.split("\\s+")));
+            String smallest = null;
+
+            for (String word : set) {
+                if (smallest == null || word.length() < smallest.length()) {
+                    smallest = word;
+                }
+            }
+            return smallest;
+        }
+
+        // 3️⃣ Replace word
+        static String replaceWord(String sentence, String oldWord, String newWord) {
+            Set<String> set = new LinkedHashSet<>(Arrays.asList(sentence.split("\\s+")));
+           /*
+           Used to efficiently build the output string
+
+Better than string concatenation in loops
+            */
+            StringBuilder sb = new StringBuilder();
+
+            for (String word : set) {
+                /*
+                if (word.equals(oldWord)) {
+    sb.append(newWord);
+} else {
+    sb.append(word);
+}
+sb.append(" ");
+
+                 */
+                sb.append(word.equals(oldWord) ? newWord : word).append(" ");
+            }
+            return sb.toString().trim();
+        }
+
+        // 4️⃣ Swap first and last word
+        static String swapFirstLastWord(String sentence) {
+            Set<String> set = new LinkedHashSet<>(Arrays.asList(sentence.split("\\s+")));
+            List<String> list = new ArrayList<>(set);
+
+            if (list.size() < 2) return sentence;
+
+            Collections.swap(list, 0, list.size() - 1);
+            return String.join(" ", list);
+        }
+
+        // 5️⃣ Sort characters alphabetically
+        static String sortCharacters(String str) {
+            Set<Character> set = new TreeSet<>();
+
+            for (char ch : str.toCharArray()) {
+                set.add(ch);
+            }
+
+            StringBuilder sb = new StringBuilder();
+            for (char ch : set) {
+                sb.append(ch);
+            }
+            return sb.toString();
+        }
+
+        // 6️⃣ Shortest distance between two words
+        static int shortestDistance(String[] words, String w1, String w2) {
+            int p1 = -1, p2 = -1, min = Integer.MAX_VALUE;
+
+            for (int i = 0; i < words.length; i++) {
+                if (words[i].equals(w1)) p1 = i;
+                if (words[i].equals(w2)) p2 = i;
+
+                if (p1 != -1 && p2 != -1) {
+                    min = Math.min(min, Math.abs(p1 - p2));
+                }
+            }
+            return min;
+        }
+
+        // 7️⃣ Longest common prefix
+        static String longestCommonPrefix(String[] strs) {
+            Set<String> set = new HashSet<>(Arrays.asList(strs));
+            String prefix = strs[0];
+
+            while (!prefix.isEmpty()) {
+                boolean match = true;
+                for (String s : set) {
+                    if (!s.startsWith(prefix)) {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) return prefix;
+                prefix = prefix.substring(0, prefix.length() - 1);
+            }
+            return "";
+        }
+
+        // 8️⃣ Find all permutations
+        static Set<String> findPermutations(String str) {
+            Set<String> result = new HashSet<>();
+
+            if (str.length() == 0) {
+                result.add("");
+                return result;
+            }
+
+            char first = str.charAt(0);
+            Set<String> remaining = findPermutations(str.substring(1));
+
+            for (String word : remaining) {
+                for (int i = 0; i <= word.length(); i++) {
+                    result.add(word.substring(0, i) + first + word.substring(i));
+                }
+            }
+            return result;
+        }
+        public static class Permutation {
+            public static void main(String[] args) {
+
+                String str = "abc";
+                List<String> perms = new ArrayList<>();
+                generatePermss(str, "", perms);
+                System.out.println(perms);
+
+            }
+
+            private static void generatePermss(String str, String prefix, List<String> perms) {
+                if(str.isEmpty()){
+                    perms.add(prefix);
+                }else {
+                    for (int i=0;i<str.length();i++){
+                        String newPrefix=prefix+str.charAt(i);
+                        String remaining=str.substring(0,i)+str.substring(i+1);
+                        generatePermss(remaining,newPrefix,perms);
+                    }
+                }
+            }
+        }
+        // 9️⃣ Lexicographically largest substring
+        static String largestSubstring(String str) {
+            Set<String> set = new HashSet<>();
+
+            for (int i = 0; i < str.length(); i++) {
+                set.add(str.substring(i));
+            }
+            return Collections.max(set);
+        }
+
+        // 🔟 Longest repeating substring
+        static String longestRepeatingSubstring(String str) {
+            Set<String> set = new HashSet<>();
+            String longest = "";
+
+            for (int i = 0; i < str.length(); i++) {
+                for (int j = i + 1; j <= str.length(); j++) {
+                    String sub = str.substring(i, j);
+                    if (!set.add(sub) && sub.length() > longest.length()) {
+                        longest = sub;
+                    }
+                }
+            }
+            return longest;
         }
     }
 
