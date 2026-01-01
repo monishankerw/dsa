@@ -124,8 +124,7 @@ public class ReverseAndPalindromeString {
             }
 
             private static String longestPalindromic(String str) {
-                if (str.isEmpty())
-                    return " ";
+                if (str.isEmpty()) return " ";
                 String longest = " ";
                 for (int i = 0; i < str.length(); i++) {
                     String odd = expondAroundCenter(str, i, i);
@@ -148,6 +147,7 @@ public class ReverseAndPalindromeString {
         }
 
     }
+
     /*
     Check If String Can Become Palindrome
 
@@ -165,7 +165,8 @@ public class ReverseAndPalindromeString {
                 if (s.charAt(l) != s.charAt(r)) {
                     return isPal(s, l + 1, r) || isPal(s, l, r - 1);
                 }
-                l++; r--;
+                l++;
+                r--;
             }
             return true;
         }
@@ -177,37 +178,38 @@ public class ReverseAndPalindromeString {
             return true;
         }
     }
-/*
-Longest Palindromic Subsequence
 
-(Not necessarily continuous)
-Input: "bbbab"
-Output: 4   // "bbbb"
+    /*
+    Longest Palindromic Subsequence
 
- */
-public static class LongestPalindromicSubsequence {
-    public static void main(String[] args) {
-        String s = "bbbab";
-        System.out.println(lps(s));
-    }
+    (Not necessarily continuous)
+    Input: "bbbab"
+    Output: 4   // "bbbb"
 
-    static int lps(String s) {
-        int n = s.length();
-        int[][] dp = new int[n][n];
+     */
+    public static class LongestPalindromicSubsequence {
+        public static void main(String[] args) {
+            String s = "bbbab";
+            System.out.println(lps(s));
+        }
 
-        for (int i = n - 1; i >= 0; i--) {
-            dp[i][i] = 1;
-            for (int j = i + 1; j < n; j++) {
-                if (s.charAt(i) == s.charAt(j)) {
-                    dp[i][j] = 2 + dp[i + 1][j - 1];
-                } else {
-                    dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+        static int lps(String s) {
+            int n = s.length();
+            int[][] dp = new int[n][n];
+
+            for (int i = n - 1; i >= 0; i--) {
+                dp[i][i] = 1;
+                for (int j = i + 1; j < n; j++) {
+                    if (s.charAt(i) == s.charAt(j)) {
+                        dp[i][j] = 2 + dp[i + 1][j - 1];
+                    } else {
+                        dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
+                    }
                 }
             }
+            return dp[0][n - 1];
         }
-        return dp[0][n - 1];
     }
-}
 
 
 }
