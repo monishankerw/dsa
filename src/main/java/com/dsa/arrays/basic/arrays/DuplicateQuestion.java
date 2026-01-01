@@ -495,6 +495,47 @@ public class DuplicateQuestion {
             return true;
         }
     }
+//TODO:18 Remove Consecutive Duplicates from String
+    /*
+    Remove only adjacent duplicates, not all duplicates.
+    Correct Approach: LinkedHashSet + Previous Character
+💡 Logic
+
+Keep track of the previous character
+
+Add current character only if it differs from previous
+
+Use LinkedHashSet to preserve insertion order
+     */
+    public static class RemoveConsecutiveDuplicatesSet {
+
+        public static void main(String[] args) {
+            String str = "aaabbccdaa";
+            System.out.println(removeConsecutiveDuplicates(str));
+        }
+
+        private static String removeConsecutiveDuplicates(String str) {
+            if (str == null || str.length() == 0) return str;
+
+            Set<Character> set = new LinkedHashSet<>();
+            StringBuilder result = new StringBuilder();
+
+            char prev = str.charAt(0);
+            set.add(prev);
+            result.append(prev);
+
+            for (int i = 1; i < str.length(); i++) {
+                char curr = str.charAt(i);
+
+                if (curr != prev) {
+                    set.add(curr);       // Set used as helper
+                    result.append(curr);
+                }
+                prev = curr;
+            }
+            return result.toString();
+        }
+    }
 
 }
 
