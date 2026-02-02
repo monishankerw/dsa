@@ -572,44 +572,35 @@ public class MapQuestion {
     }
 
     public static class MergeTwoSortedElements {
+
         public static void main(String[] args) {
+
             int[] arr1 = {1, 3, 5, 6};
             int[] arr2 = {2, 3, 6, 8};
-            mergeTwoSortedElements(arr1, arr2);
-            int[] result = mergeTwoSortedElementsJava8(arr1, arr2);
-            System.out.println(Arrays.toString(result));
-        }
 
-        private static void mergeTwoSortedElements(int[] arr1, int[] arr2) {
-            Map<Integer, Integer> map = new TreeMap<>();
+            Map<Integer, Integer> map = new HashMap<>();
 
-            // Count frequencies from arr1
+            // Add elements of first array
             for (int num : arr1) {
-                map.merge(num, 1, Integer::sum);
+                map.put(num, map.getOrDefault(num, 0) + 1);
             }
 
-            // Count frequencies from arr2
+            // Add elements of second array
             for (int num : arr2) {
-                map.merge(num, 1, Integer::sum);
+                map.put(num, map.getOrDefault(num, 0) + 1);
             }
 
-            // Prepare result array
-            int[] result = new int[arr1.length + arr2.length];
-            int index = 0;
-
-            // Fill result based on sorted keys and their counts
+            // Print merged result (unordered)
+            System.out.println("Merged using HashMap:");
             for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
                 int key = entry.getKey();
-                int value = entry.getValue();
+                int count = entry.getValue();
 
-                while (value-- > 0) {
-                    result[index++] = key;
+                for (int i = 0; i < count; i++) {
+                    System.out.print(key + " ");
                 }
             }
-
-            System.out.println(Arrays.toString(result));
         }
-
     }
 
     private static int[] mergeTwoSortedElementsJava8(int[] arr1, int[] arr2) {
