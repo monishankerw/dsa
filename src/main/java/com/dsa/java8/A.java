@@ -3,6 +3,7 @@ package com.dsa.java8;
 import com.dsa.arrays.basic.PrimeNumber;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,6 +28,11 @@ public class A {
         list.stream().mapToInt(x->x).min().ifPresent(min-> System.out.println("Min:"+min));
         int sum = list.stream().mapToInt(Integer::intValue).sum();
         System.out.println(sum);
+        //Second highest Number
+        Optional<Integer> first1 = list.stream().sorted(Comparator.reverseOrder()).skip(1).findFirst();
+        System.out.println("Second highest elements"+first1);
+        List<Integer> list6 = list.stream().filter(x -> x % 2 == 0).limit(6).toList();
+        System.out.println(list6);
         Integer sumOfEvenAndSquare = list.stream().filter(x -> x % 2 == 0).map(x -> x * x).reduce(0, Integer::sum);
         System.out.println("Sum Of Even and sqare.."+sumOfEvenAndSquare);
         OptionalDouble average = list.stream().filter(x -> x % 2 == 0).mapToInt(x -> x).average();
@@ -53,6 +59,22 @@ public class A {
         list4.stream().mapToInt(x->x).mapToObj(c->(char)c).forEach(c-> System.out.println("CHAR"+c));
         int[]arr={1,2,3,4,5,2};
         Arrays.stream(arr).distinct().forEach(x-> System.out.println("Remove dup"+x));
+        int[]arr1={1,2,1,3,2,1,3,4,2};
+        int k=2;
+        Map<Integer, Long> FreOCC = Arrays.stream(arr1).boxed().collect(Collectors.groupingBy(x -> x, Collectors.counting()));
+        System.out.println("Fre OCC"+FreOCC);
+        Map<Integer, java.lang.Long>map =Arrays.stream(arr1).boxed().collect(Collectors.groupingBy(x->x,Collectors.counting()));
+        List<Integer> list5 = map.entrySet().stream().filter(e -> e.getValue() == k).map(Map.Entry::getKey).toList();
+        System.out.println("Kth Freq Occ"+list5);
+        Optional<Map.Entry<Integer, Long>> first = Arrays.stream(arr1).boxed().collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting())).entrySet().stream().filter(e -> e.getValue() == 1).findFirst();
+        System.out.println("Find Non repeating number"+first);
+        Map<Object, Long> collect = Arrays.stream(arr1).boxed().collect(Collectors.groupingBy(x ->x, Collectors.counting()));
+        collect.forEach((k1,v)-> System.out.println(k+"->"+v));
+        //Show Duplicate
+        HashSet<Object> set = new HashSet<>();
+        Set<Integer> set1 = Arrays.stream(arr1).filter(x -> !set.add(x)).boxed().collect(Collectors.toSet());
+        System.out.println("Show duplicate"+set1);
+
     }
     public static boolean isPrimes(int x){
         int n=0;
@@ -64,4 +86,5 @@ public class A {
         return true;
     }
     //
+
 }
