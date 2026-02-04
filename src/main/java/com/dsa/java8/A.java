@@ -12,6 +12,7 @@ public class A {
 
 
         List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 4, 5, 7);
+        List<String> word = Arrays.asList("apple", "banana", "cherry", "app", "application");
 //        List<Integer> primeNum = list.stream().filter(PrimeNumber::isPrimes).toList();
 //        System.out.println("Prime number"+primeNum);
         List<Integer> evenNumber = list.stream().filter(x -> x % 2 == 0).collect(Collectors.toList());
@@ -74,6 +75,50 @@ public class A {
         HashSet<Object> set = new HashSet<>();
         Set<Integer> set1 = Arrays.stream(arr1).filter(x -> !set.add(x)).boxed().collect(Collectors.toSet());
         System.out.println("Show duplicate"+set1);
+
+        List<String> upperCase = word.stream().map(String::toUpperCase).toList();
+        System.out.println(upperCase);
+        List<String> startWith = word.stream().filter(w -> w.startsWith("a")).toList();
+        System.out.println(startWith);
+        Map<Integer, List<String>> grouplength = word.stream().collect(Collectors.groupingBy(String::length));
+        System.out.println(grouplength);
+        long count1 = word.stream().filter(x -> x.length() > 3).count();
+        System.out.println("Count Length::"+count1);
+        List<String> sort = word.stream().sorted().toList();
+        System.out.println("Sort alph"+sort);
+        word.stream().mapToInt(String::length).forEach(l-> System.out.println(l));
+        Optional<String> reduce = word.stream().reduce((x, y) -> x.length() > y.length() ? x : y);
+        System.out.println(reduce);
+
+        //Frequency occurence
+        String input="aavmprqounba";
+        String []str=input.split(" ");
+        Map<String, Long> freqOcc = Arrays.stream(str).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        System.out.println("Freq Occ"+freqOcc);
+        //Count character occurrence  in a string
+        String inputs="hello word";
+        Map<Character, Long> map1 = inputs.chars().mapToObj(c -> (char) c).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        System.out.println("Count character occurrence  in a string"+map1);
+        //Frequence occ word
+        String str1="Test I Test my Test abc";
+        String[] words = str1.split("\\s+");
+        Map<String, Long> freqOccWords = Arrays.stream(words).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        System.out.println(freqOccWords);
+
+        //Freq Occ Character
+        char[]c={'a','a','d','w','t','q','t'};
+        new String(c).chars().mapToObj(c1->(char)c1).collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
+        //Find duplicate charcters woth occurence>1
+        List<String> dupGraterThan1 = Arrays.stream(words).collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream().filter(e -> e.getValue() >1).map(Map.Entry::getKey).toList();
+        System.out.println(dupGraterThan1);
+
+        //Find unique elements
+        List<String> uniqueElements = Arrays.stream(words).collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream().filter(e -> e.getValue() == 1).map(Map.Entry::getKey).toList();
+        System.out.println(uniqueElements);
+
+        //Find the first non-repeating elements
+        Optional<String> firstNonRepeating = Arrays.stream(words).collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream().filter(e -> e.getValue() == 1).map(Map.Entry::getKey).findFirst();
+        System.out.println(firstNonRepeating);
 
     }
     public static boolean isPrimes(int x){
