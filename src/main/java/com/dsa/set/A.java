@@ -160,6 +160,21 @@ public class A {
         }
     }
 
+    //TODO: Union of two sets
+    public static class Union {
+        public static void main(String[] args) {
+            int arr1[] = {1, 2, 3};
+            int arr2[] = {2, 3, 4};
+            Set<Integer> set = new HashSet<>();
+            for (int num : arr1)
+                set.add(num);
+            for (int num : arr2)
+                set.add(num);
+            System.out.println(set);
+        }
+    }
+
+
     //TODO:Find Common character
     public static class CommonChar {
         public static void main(String[] args) {
@@ -168,17 +183,44 @@ public class A {
             Set<Character> set1 = new HashSet<>();
             Set<Character> result = new HashSet<>();
             for (char c : s1.toCharArray()) {
+                /*
+                Converts a String → character array
+                Because:
+              Strings are immutable
+              Arrays are easier to iterate and modify
+                 */
                 set1.add(c);
             }
             for (char c : s2.toCharArray()) {
                 if (set1.contains(c)) {
+                    /*
+                    “Check if something exists inside a collection or string”
+                    String s = "hello world";
+                       System.out.println(s.contains("hello")); // true
+                       System.out.println(s.contains("abc"));   // false
+                     */
                     result.add(c);
                 }
             }
             System.out.println(result);
         }
     }
-
+    //TODO:Intersection of two sets
+    public static class Intersection {
+        public static void main(String[] args) {
+            int arr1[] = {1, 2, 3, 4};
+            int arr2[] = {1, 2};
+            Set<Integer> set = new HashSet<>();
+            for (int i = 0; i < arr1.length; i++) {
+                set.add(arr1[i]);
+            }
+            for (int i = 0; i < arr2.length; i++) {
+                if (set.contains(arr2[i])) {
+                    System.out.println(arr2[i]);
+                }
+            }
+        }
+    }
     //TODO:Find Isogram String
     public static class IsogramString {
         public static void main(String[] args) {
@@ -219,36 +261,6 @@ public class A {
         }
     }
 
-    //TODO: Union of two sets
-    public static class Union {
-        public static void main(String[] args) {
-            int arr1[] = {1, 2, 3};
-            int arr2[] = {2, 3, 4};
-            Set<Integer> set = new HashSet<>();
-            for (int num : arr1)
-                set.add(num);
-            for (int num : arr2)
-                set.add(num);
-            System.out.println(set);
-        }
-    }
-
-    //TODO:Intersection of two sets
-    public static class Intersection {
-        public static void main(String[] args) {
-            int arr1[] = {1, 2, 3, 4};
-            int arr2[] = {1, 2};
-            Set<Integer> set = new HashSet<>();
-            for (int i = 0; i < arr1.length; i++) {
-                set.add(arr1[i]);
-            }
-            for (int i = 0; i < arr2.length; i++) {
-                if (set.contains(arr2[i])) {
-                    System.out.println(arr2[i]);
-                }
-            }
-        }
-    }
 
     //TODO: Check if String can from a Palindrome
     public static class CheckPalindrome {
