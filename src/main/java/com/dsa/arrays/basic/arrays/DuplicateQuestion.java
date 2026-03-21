@@ -171,7 +171,7 @@ public class DuplicateQuestion {
     public static class OnlyAlphabets {
 
         public static void main(String[] args) {
-            String str = "HelloWorld";
+            String str = "Hello34World";
 
             System.out.println(onlyAlphabets(str) ? "Contains Only Alphabets" : "Contains Non-Alphabet Characters");
         }
@@ -574,8 +574,8 @@ Use LinkedHashSet to preserve insertion order
             // 8. All permutations
             System.out.println("8. Permutations of 'ABC' : " + findPermutations("ABC"));
 
-            // 9. Lexicographically largest substring
-            System.out.println("9. Largest Substring : " + largestSubstring("banana"));
+                // 9. Lexicographically largest substring
+                System.out.println("9. Largest Substring : " + largestSubstring("banana"));
 
             // 10. Longest repeating substring
             System.out.println("10. Longest Repeating Substring : " + longestRepeatingSubstring("banana"));
@@ -584,6 +584,7 @@ Use LinkedHashSet to preserve insertion order
         // 1️⃣ Find longest word
         static String findLongestWord(String sentence) {
             Set<String> set = new LinkedHashSet<>(Arrays.asList(sentence.split("\\s+")));
+            System.out.println(set);
             String longest = "";
 
             for (String word : set) {

@@ -14,14 +14,14 @@ public class MinAndMaxOcc {
             for (int num:arr){
                 map.put(num,map.getOrDefault(num,0)+1);
             }
-            int mostFreq=-1,mostCount=0;
+            int result=-1,mostCount=0;
             for (Map.Entry<Integer,Integer>entry:map.entrySet()){
                 if(entry.getValue()>mostCount){
                     mostCount=entry.getValue();
-                    mostFreq=entry.getKey();
+                    result=entry.getKey();
                 }
             }
-            System.out.println(mostFreq);
+            System.out.println(result);
         }
     }
 
@@ -41,17 +41,17 @@ public class MinAndMaxOcc {
                 map.put(ch, map.getOrDefault(ch, 0) + 1);
             }
 
-            char maxchar = ' ';
+            char result = ' ';
             int maxcount = 0;
 
             for (Map.Entry<Character, Integer> entry : map.entrySet()) {
                 if (entry.getValue() > maxcount) {
                     maxcount = entry.getValue();
-                    maxchar = entry.getKey();
+                    result = entry.getKey();
                 }
             }
 
-            System.out.println("MaxOcc " + maxchar);
+            System.out.println("MaxOcc " + result);
         }
 
         private static void minOccChar(String str) {
@@ -61,17 +61,17 @@ public class MinAndMaxOcc {
                 map.put(ch, map.getOrDefault(ch, 0) + 1);
             }
 
-            char minchar = ' ';
+            char result = ' ';
             int mincount = Integer.MAX_VALUE;
 
             for (Map.Entry<Character, Integer> entry : map.entrySet()) {
                 if (entry.getValue() < mincount) {
                     mincount = entry.getValue();
-                    minchar = entry.getKey();
+                    result = entry.getKey();
                 }
             }
 
-            System.out.println("MinOcc " + minchar);
+            System.out.println("MinOcc " + result);
         }
 
 }
