@@ -82,7 +82,7 @@ public class A {
 
             private static void duplicateCharacter(String str) {
                 String s = str.toLowerCase().replaceAll("\\s+", "");
-                LinkedHashMap<Character, Long> map = s.chars().mapToObj(c -> (char) c).collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()));
+                    LinkedHashMap<Character, Long> map = s.chars().mapToObj(c -> (char) c).collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()));
                 List<Character> list = map.entrySet().stream().filter(e -> e.getValue() > 1).map(Map.Entry::getKey).toList();
                 System.out.println(list);
             }
@@ -205,11 +205,12 @@ public class A {
             System.out.println(result);
         }
     }
+
     //TODO:Intersection of two sets
     public static class Intersection {
         public static void main(String[] args) {
             int arr1[] = {1, 2, 3, 4};
-            int arr2[] = {1, 2};
+            int arr2[] = {1, 2,7};
             Set<Integer> set = new HashSet<>();
             for (int i = 0; i < arr1.length; i++) {
                 set.add(arr1[i]);
@@ -221,6 +222,7 @@ public class A {
             }
         }
     }
+
     //TODO:Find Isogram String
     public static class IsogramString {
         public static void main(String[] args) {
@@ -361,13 +363,29 @@ public class A {
             System.out.println(perms);
 
         }
+/*
+What is substring()?
+It is a method of the Java String class used to extract a part of a string.
 
+✅ Syntax
+1️⃣ Single parameter
+str.substring(beginIndex)
+Returns substring from beginIndex → end
+2️⃣ Two parameters
+str.substring(beginIndex, endIndex)
+ Returns substring from beginIndex → endIndex - 1
+ String s = "abcdef";
+System.out.println(s.substring(2)); ----> cdef
+String s = "abcdef";
+System.out.println(s.substring(2, 5));---> cde
+ */
         private static void generatePermss(String str, String prefix, List<String> perms) {
             if (str.isEmpty()) {
                 perms.add(prefix);
             } else {
                 for (int i = 0; i < str.length(); i++) {
                     String newPrefix = prefix + str.charAt(i);
+
                     String remaining = str.substring(0, i) + str.substring(i + 1);
                     generatePermss(remaining, newPrefix, perms);
                 }
@@ -513,9 +531,16 @@ public class A {
     public static class SubstringCountSet {
 
         public static int countSubstring(String str, String sub) {
+            //This will store starting indexes where substring is found.
             Set<Integer> indexes = new HashSet<>();
-
+/*
+str.length() = 7
+sub.length() = 3
+Loop runs: i = 0 → 4
+i + sub.length() must not exceed string length
+ */
             for (int i = 0; i <= str.length() - sub.length(); i++) {
+                //  Step 3: Extract Substring & Compare
                 if (str.substring(i, i + sub.length()).equals(sub)) {
                     indexes.add(i);
                 }
@@ -568,23 +593,63 @@ public class A {
     public static class LongestSubstringWithout {
 
         public static void main(String[] args) {
+            /*
+            Step 1: Problem Understanding
+
+“We need to find the length of the longest substring without repeating characters.”
+             */
             String s = "abcabcbb";
+/*
+Step 2: Approach Selection
 
+“I’ll use a Sliding Window approach with two pointers (left and right) and a HashMap to track characters.”
+Step 3: Why HashMap?
+
+“I use a HashMap<Character, Integer> to store:
+character → last seen index
+This helps me quickly detect duplicates and adjust the window.”
+ */
             Map<Character, Integer> map = new HashMap<>();
+            /*
+            Step 4: Initialize Variables
+            left represents the start of the window, and maxLen stores the result.”
+             */
             int left = 0, maxLen = 0;
+/*
+Step 5: Traverse String
 
+“I iterate the string using a right pointer.”
+ */
             for (int right = 0; right < s.length(); right++) {
+                /*
+                Step 6: Handle Each Character
+                 */
                 char ch = s.charAt(right);
+/*
+tep 7: Use containsKey() (IMPORTANT 🔥)
 
+“I check if the character already exists in the map using containsKey().”
+Say this clearly:
+
+“If the character is already present, it means we found a duplicate.
+So I move the left pointer to one position ahead of the last occurrence of that character.”
+ */
                 if (map.containsKey(ch)) {
                     left = Math.max(left, map.get(ch) + 1);
                 }
-
+/*
+Step 8: Update Map
+“I update the latest index of the character.”
+ */
                 map.put(ch, right);
+                /*
+                Step 9: Update Result
+                “I calculate the current window size and update the maximum length.”
+                 */
                 maxLen = Math.max(maxLen, right - left + 1);
             }
 
-
+//Step 10: Return Result
             System.out.println(maxLen);
         }
     }

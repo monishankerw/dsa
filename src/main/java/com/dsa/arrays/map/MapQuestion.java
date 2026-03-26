@@ -17,7 +17,7 @@ public class MapQuestion {
 
     public static class FreqOccString {
         public static void main(String[] args) {
-            String str = "tertsrttewrteew";
+            String str = "terts##$@#$rttewrteew";
             Map<Character, Integer> map = freqOccString(str);
             System.out.println("Freq Occ:" + map);
             Map<String, Long> map1 = freqOccStringJava8(str);
