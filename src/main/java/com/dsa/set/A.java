@@ -402,21 +402,14 @@ System.out.println(s.substring(2, 5));---> cde
         }
 
         static String longestCommonPrefix(String[] strs) {
-            Set<String> set = new HashSet<>(Arrays.asList(strs));
             String prefix = strs[0];
 
-            while (!prefix.isEmpty()) {
-                boolean match = true;
-                for (String s : set) {
-                    if (!s.startsWith(prefix)) {
-                        match = false;
-                        break;
-                    }
+            for (int i = 1; i < strs.length; i++) {
+                while (!strs[i].startsWith(prefix)) {
+                    prefix = prefix.substring(0, prefix.length() - 1);
                 }
-                if (match) return prefix;
-                prefix = prefix.substring(0, prefix.length() - 1);
             }
-            return "";
+            return prefix;
         }
 
     }
