@@ -151,4 +151,29 @@ space → false
             return true;
         }
     }
+    //TODO: 5. **Move Zeroes**    **Move Negative Numbers**
+    // nums = [3, 2, 2, 3]
+    //val = 3
+    // TODO: **Remove a Specific Element**
+    public static class RemoveSpecificElements{
+        public static void main(String[] args) {
+            int[] nums={3,2,2,3};
+            int val=2;
+            removeSpecificElements(nums,val);
+        }
+
+        private static void removeSpecificElements(int[] nums, int val) {
+            int j=0;
+            for(int i=0;i<nums.length;i++){
+                if(nums[i]!=val){
+                    nums[j]=nums[i];
+                    j++;
+
+                }
+            }
+            System.out.println(j);
+        }
+    }
+
+
 }
