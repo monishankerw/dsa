@@ -1632,3 +1632,82 @@ Monitoring
 
 For your Java/Spring Boot background, I would especially prepare **Java 8 Streams + HashMap internals + concurrency + CompletableFuture + LRU Cache + rate limiter + idempotency + Kafka duplicate handling + SQL + payment/wallet scenarios**.
 # DSA Algorithms
+
+
+Yes. I’ll separate the **Two Pointer** questions from your uploaded question bank. The source has a dedicated Two Pointer section with 20 questions. Pasted markdown
+
+## 🔥 Two Pointer Questions — Separate List
+
+### 🟢 Easy
+
+1. **Two Sum in Sorted Array**
+2. **Reverse Array Using Two Pointers**
+3. **Check Palindrome Using Two Pointers**
+4. **Remove Duplicates from Sorted Array**
+5. **Move Zeroes**
+6. **Move Negative Numbers**
+7. **Merge Two Sorted Arrays**
+8. **Pair with Target Sum**
+9. **Remove a Specific Element**
+10. **Squares of Sorted Array**
+
+### 🟡 Medium
+
+11. **Three Sum**
+12. **Four Sum**
+13. **Container With Most Water**
+14. **Sort Colors**
+15. **Pair with Closest Sum**
+16. **Valid Palindrome After Deleting One Character**
+17. **Compare Strings with Backspaces**
+18. **Partition Array**
+19. **Dutch National Flag Problem**
+
+### 🔴 Hard
+
+20. **Trapping Rain Water**
+
+These are the **20 Two Pointer problems directly listed in your file**. Pasted markdown
+
+### 🎯 Best practice order for Java interview
+
+Start with:
+
+**1 → 2 → 3 → 4 → 5 → 7 → 8 → 11 → 13 → 14 → 16 → 17 → 20**
+
+This sequence gradually teaches:
+`Left/Right Pointer → Sorted Array → Fast/Slow → Opposite Direction → Multiple Pointers → Advanced Two Pointer`
+
+If you want, I can next give you **all 20 Two Pointer problems with LeetCode links + Java solution + example + time/space complexity**, one by one from Easy → Hard.
+
+Sure. Here are the **20 Two Pointer questions** from your list with their **LeetCode links**. Pasted markdown
+
+| # | Problem | LeetCode |
+|---|---|---|
+| 1 | Two Sum in Sorted Array | [Two Sum II – Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/?utm_source=chatgpt.com) |
+| 2 | Reverse Array Using Two Pointers | — No direct LeetCode problem |
+| 3 | Check Palindrome Using Two Pointers | [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/?utm_source=chatgpt.com) |
+| 4 | Remove Duplicates from Sorted Array | [Remove Duplicates from Sorted Array](https://leetcode.com/problems/remove-duplicates-from-sorted-array/?utm_source=chatgpt.com) |
+| 5 | Move Zeroes | [Move Zeroes](https://leetcode.com/problems/move-zeroes/?utm_source=chatgpt.com) |
+| 6 | Move Negative Numbers | — No exact direct LeetCode problem |
+| 7 | Merge Two Sorted Arrays | [Merge Sorted Array](https://leetcode.com/problems/merge-sorted-array/?utm_source=chatgpt.com) |
+| 8 | Three Sum | [3Sum](https://leetcode.com/problems/3sum/?utm_source=chatgpt.com) |
+| 9 | Four Sum | [4Sum](https://leetcode.com/problems/4sum/?utm_source=chatgpt.com) |
+| 10 | Container With Most Water | [Container With Most Water](https://leetcode.com/problems/container-with-most-water/?utm_source=chatgpt.com) |
+| 11 | Trapping Rain Water | [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/?utm_source=chatgpt.com) |
+| 12 | Sort Colors | [Sort Colors](https://leetcode.com/problems/sort-colors/?utm_source=chatgpt.com) |
+| 13 | Pair With Target Sum | [Two Sum II – Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/?utm_source=chatgpt.com) |
+| 14 | Pair With Closest Sum | — No exact direct LeetCode problem |
+| 15 | Remove a Specific Element | [Remove Element](https://leetcode.com/problems/remove-element/?utm_source=chatgpt.com) |
+| 16 | Squares of Sorted Array | [Squares of a Sorted Array](https://leetcode.com/problems/squares-of-a-sorted-array/?utm_source=chatgpt.com) |
+| 17 | Valid Palindrome After Deleting One Character | [Valid Palindrome II](https://leetcode.com/problems/valid-palindrome-ii/?utm_source=chatgpt.com) |
+| 18 | Compare Strings With Backspaces | [Backspace String Compare](https://leetcode.com/problems/backspace-string-compare/?utm_source=chatgpt.com) |
+| 19 | Partition Array | [Sort Colors](https://leetcode.com/problems/sort-colors/?utm_source=chatgpt.com) |
+| 20 | Dutch National Flag Problem | [Sort Colors](https://leetcode.com/problems/sort-colors/?utm_source=chatgpt.com) |
+
+The original file lists these under **Two Pointer — 20 Questions**. Pasted markdown
+
+**Recommended order for you:**  
+`Two Sum II → Valid Palindrome → Remove Duplicates → Move Zeroes → Merge Sorted Array → 3Sum → 4Sum → Container With Most Water → Sort Colors → Valid Palindrome II → Backspace Compare → Trapping Rain Water`
+
+If you want, I can give you **#1 Two Sum II complete Java code + dry run + two-pointer explanation**, then continue **1 → 20**.
