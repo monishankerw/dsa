@@ -612,6 +612,67 @@ public class MapQuestion {
 
 }
 
+Merge two sorted arrays in descending order
+    int[] arr1 = {1, 3, 5, 7};
+int[] arr2 = {2, 4, 6, 8};
+
+[8, 7, 6, 5, 4, 3, 2, 1]
+
+import java.util.*;
+import java.util.stream.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[] arr1 = {1, 3, 5, 7};
+        int[] arr2 = {2, 4, 6, 8};
+
+        int[] result = IntStream.concat(
+                Arrays.stream(arr1),
+                Arrays.stream(arr2)
+        )
+        .boxed()
+        .sorted(Comparator.reverseOrder())
+        .mapToInt(Integer::intValue)
+        .toArray();
+
+        System.out.println(Arrays.toString(result));
+    }
+}
+
+
+
+Merge two sorted arrays and remove duplicates
+
+    int[] arr1 = {1, 2, 3, 5};
+int[] arr2 = {2, 3, 4, 6};
+
+[1, 2, 3, 4, 5, 6]
+
+    
+import java.util.*;
+import java.util.stream.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[] arr1 = {1, 2, 3, 5};
+        int[] arr2 = {2, 3, 4, 6};
+
+        int[] result = IntStream.concat(
+                Arrays.stream(arr1),
+                Arrays.stream(arr2)
+        )
+        .distinct()
+        .sorted()
+        .toArray();
+
+        System.out.println(Arrays.toString(result));
+    }
+}
+
 Here are Java interview examples to **merge two Strings, Numbers, Arrays and Characters** using both Traditional Java (for loop) and Java 8 Stream API.
 
 # **1. Merge two Strings**
