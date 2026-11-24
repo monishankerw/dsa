@@ -624,7 +624,7 @@ public class MapQuestion {
     }
 
 }
-
+/*
 Merge two sorted arrays in descending order
     int[] arr1 = {1, 3, 5, 7};
 int[] arr2 = {2, 4, 6, 8};
@@ -942,3 +942,5 @@ Try these yourself using both approaches.
 Show expected outputsReset
 
 **Interview tip:** Practice each problem with `for loop`, `StringBuilder`, and Java 8 Streams. Be ready to explain time and space complexity.
+
+ */
