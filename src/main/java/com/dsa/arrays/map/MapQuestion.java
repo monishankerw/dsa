@@ -624,3 +624,321 @@ public class MapQuestion {
     }
 
 }
+
+Merge two sorted arrays in descending order
+    int[] arr1 = {1, 3, 5, 7};
+int[] arr2 = {2, 4, 6, 8};
+
+[8, 7, 6, 5, 4, 3, 2, 1]
+
+import java.util.*;
+import java.util.stream.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[] arr1 = {1, 3, 5, 7};
+        int[] arr2 = {2, 4, 6, 8};
+
+        int[] result = IntStream.concat(
+                Arrays.stream(arr1),
+                Arrays.stream(arr2)
+        )
+        .boxed()
+        .sorted(Comparator.reverseOrder())
+        .mapToInt(Integer::intValue)
+        .toArray();
+
+        System.out.println(Arrays.toString(result));
+    }
+}
+
+
+
+Merge two sorted arrays and remove duplicates
+
+    int[] arr1 = {1, 2, 3, 5};
+int[] arr2 = {2, 3, 4, 6};
+
+[1, 2, 3, 4, 5, 6]
+
+    
+import java.util.*;
+import java.util.stream.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        int[] arr1 = {1, 2, 3, 5};
+        int[] arr2 = {2, 3, 4, 6};
+
+        int[] result = IntStream.concat(
+                Arrays.stream(arr1),
+                Arrays.stream(arr2)
+        )
+        .distinct()
+        .sorted()
+        .toArray();
+
+        System.out.println(Arrays.toString(result));
+    }
+}
+
+Here are Java interview examples to **merge two Strings, Numbers, Arrays and Characters** using both Traditional Java (for loop) and Java 8 Stream API.
+
+# **1. Merge two Strings**
+
+Input: `"Hello"` + `"World"`
+
+**Traditional Java**
+
+```
+
+public class Main {
+    public static void main(String[] args) {
+
+        String str1 = "Hello";
+        String str2 = "World";
+
+        String result = "";
+
+        for (int i = 0; i < str1.length(); i++) {
+            result += str1.charAt(i);
+        }
+
+        for (int i = 0; i < str2.length(); i++) {
+            result += str2.charAt(i);
+        }
+
+        System.out.println(result);
+    }
+}
+
+```
+
+**Java 8**
+
+```
+
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
+
+public class Main {
+    public static void main(String[] args) {
+
+        String str1 = "Hello";
+        String str2 = "World";
+
+        String result = Stream.of(str1, str2)
+                .collect(Collectors.joining());
+
+        System.out.println(result);
+    }
+}
+
+```
+
+Output: HelloWorld
+
+# **2. Merge two Numbers**
+
+Input: `123` + `456` → `123456`
+
+**Traditional Java**
+
+```
+
+public class Main {
+    public static void main(String[] args) {
+
+        int num1 = 123;
+        int num2 = 456;
+
+        String result = String.valueOf(num1)
+                + String.valueOf(num2);
+
+        int merged = Integer.parseInt(result);
+
+        System.out.println(merged);
+    }
+}
+
+```
+
+**Java 8**
+
+```
+
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
+
+public class Main {
+    public static void main(String[] args) {
+
+        int num1 = 123;
+        int num2 = 456;
+
+        String result = Stream.of(num1, num2)
+                .map(String::valueOf)
+                .collect(Collectors.joining());
+
+        System.out.println(result);
+    }
+}
+
+```
+
+Output: 123456
+
+Note: This merges numbers as digits (text), not mathematical addition. The Java 8 example returns a String.
+
+# **3. Merge two Arrays**
+
+Input: `{1,2,3}` + `{4,5,6}`
+
+**Traditional Java**
+
+```
+
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+
+        int[] arr1 = {1, 2, 3};
+        int[] arr2 = {4, 5, 6};
+
+        int[] result = new int[arr1.length + arr2.length];
+
+        for (int i = 0; i < arr1.length; i++) {
+            result[i] = arr1[i];
+        }
+
+        for (int i = 0; i < arr2.length; i++) {
+            result[arr1.length + i] = arr2[i];
+        }
+
+        System.out.println(Arrays.toString(result));
+    }
+}
+
+```
+
+**Java 8**
+
+```
+
+import java.util.*;
+import java.util.stream.*;
+
+public class Main {
+    public static void main(String[] args) {
+
+        int[] arr1 = {1, 2, 3};
+        int[] arr2 = {4, 5, 6};
+
+        int[] result = IntStream.concat(
+                Arrays.stream(arr1),
+                Arrays.stream(arr2)
+        ).toArray();
+
+        System.out.println(Arrays.toString(result));
+    }
+}
+
+```
+
+Output: [1, 2, 3, 4, 5, 6]
+
+# **4. Merge two Characters**
+
+Input: `'A'` + `'B'`
+
+**Traditional Java**
+
+```
+
+public class Main {
+    public static void main(String[] args) {
+
+        char ch1 = 'A';
+        char ch2 = 'B';
+
+        String result = "";
+
+        result += ch1;
+        result += ch2;
+
+        System.out.println(result);
+    }
+}
+
+```
+
+**Java 8**
+
+```
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+    public static void main(String[] args) {
+
+        char ch1 = 'A';
+        char ch2 = 'B';
+
+        String result = Stream.of(ch1, ch2)
+                .map(String::valueOf)
+                .collect(Collectors.joining());
+
+        System.out.println(result);
+    }
+}
+
+```
+
+Output: AB
+
+# **5. Interview revision table**
+
+| Problem          | Traditional Java      | Java 8                 |
+| ---------------- | --------------------- | ---------------------- |
+| Merge Strings    | `+` / `StringBuilder` | `Stream.of()`          |
+| Merge Numbers    | `String.valueOf()`    | `map(String::valueOf)` |
+| Merge Arrays     | `for` loop            | `IntStream.concat()`   |
+| Merge Characters | `StringBuilder`       | `Stream.of()`          |
+
+# **6. Practice questions**
+
+Try these yourself using both approaches.
+
+**Java coding practice**
+
+0/5 attempted
+
+**1. Merge two strings: Java + Developer**
+
+
+
+**2. Merge two numbers: 12 + 34 (as digits)**
+
+
+
+**3. Merge arrays: [10,20] + [30,40]**
+
+
+
+**4. Merge characters: J + A + V + A**
+
+
+
+**5. Merge two arrays and remove duplicates: [1,2,3] + [2,3,4]**
+
+
+
+Show expected outputsReset
+
+**Interview tip:** Practice each problem with `for loop`, `StringBuilder`, and Java 8 Streams. Be ready to explain time and space complexity.
