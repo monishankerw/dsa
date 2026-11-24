@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Exception handling in Spring Boot: @ControllerAdvice, @ExceptionHandler, custom validation annotations, all annotations and interview questions.">
+<title>Exception Handling in Spring Boot: Interview Guide</title>
+<style>
+.sb{--bg:#fff;--tx:#1c2738;--mu:#5e6b7d;--pr:#1769e0;--bd:#dce4ef;--sf:#f2f6fc;--cb:#111827}
+@media(prefers-color-scheme:dark){.sb{--bg:#0f172a;--tx:#e2e8f0;--mu:#94a3b8;--pr:#6aa6ff;--bd:#2a3750;--sf:#172036}}
+.sb{max-width:780px;margin:auto;padding:16px;color:var(--tx);background:var(--bg);font:17px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}
+.sb *{box-sizing:border-box}
+.sb h1{font-size:2rem;line-height:1.2;margin:.2em 0}
+.sb h2{font-size:1.4rem;margin:1.9em 0 .5em;padding-top:.4em;border-top:1px solid var(--bd)}
+.sb .lead{color:var(--mu)}
+.sb a{color:var(--pr)}
+.sb .toc{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:10px 16px;margin:1.2em 0}
+.sb .toc ol{columns:2;margin:6px 0;padding-left:1.4em;font-size:.9rem}
+.sb code{background:var(--sf);padding:1px 5px;border-radius:4px;font-size:.9em}
+.sb pre{position:relative;background:var(--cb);color:#e5e7eb;padding:14px;border-radius:10px;overflow:auto;font:14px/1.6 ui-monospace,Menlo,Consolas,monospace;margin:12px 0}
+.sb pre code{background:none;padding:0;color:inherit}
+.sb pre button{position:absolute;top:6px;right:6px;font-size:.75rem;background:#1f2937;color:#fff;border:1px solid #475569;border-radius:6px;padding:3px 8px;cursor:pointer}
+.sb .tip{border-left:4px solid var(--pr);background:var(--sf);padding:10px 14px;border-radius:8px;margin:14px 0}
+.sb .tw{overflow-x:auto}
+.sb table{border-collapse:collapse;width:100%;font-size:.93rem;margin:12px 0}
+.sb th,.sb td{border:1px solid var(--bd);padding:8px 10px;text-align:left;vertical-align:top}
+.sb th{background:var(--sf)}
+.sb details{border:1px solid var(--bd);border-radius:8px;padding:8px 12px;margin:8px 0}
+.sb summary{cursor:pointer;font-weight:600}
+@media(max-width:560px){.sb .toc ol{columns:1}.sb h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<div class="sb">
+<h1>Exception Handling in Spring Boot</h1>
+<p class="lead">How Spring Boot handles exceptions, how to build a global handler and custom annotations, every annotation explained, and common interview questions.</p>
+
+<div class="toc"><strong>Contents</strong>
+<ol>
+<li><a href="#how">How it works internally</a></li>
+<li><a href="#ways">Ways to handle exceptions</a></li>
+<li><a href="#global">Global handler</a></li>
+<li><a href="#valid">Custom validation annotation</a></li>
+<li><a href="#apierr">Annotation-driven mapping</a></li>
+<li><a href="#cheat">Annotation cheat sheet</a></li>
+<li><a href="#qa">Interview questions</a></li>
+</ol></div>
+
+<h2 id="how">1. How it works internally</h2>
+<p>When a controller throws an exception, <code>DispatcherServlet</code> passes it through a chain of <code>HandlerExceptionResolver</code>s:</p>
+<ol>
+<li><strong>ExceptionHandlerExceptionResolver</strong> looks for <code>@ExceptionHandler</code> methods, first in the controller, then in <code>@ControllerAdvice</code>.</li>
+<li><strong>ResponseStatusExceptionResolver</strong> handles <code>@ResponseStatus</code> and <code>ResponseStatusException</code>.</li>
+<li><strong>DefaultHandlerExceptionResolver</strong> maps built-in Spring exceptions (such as <code>HttpRequestMethodNotSupportedException</code>) to 4xx codes.</li>
+<li>If nothing handles it, the error goes to <code>/error</code> (<code>BasicErrorController</code>), which returns the default JSON or Whitelabel page.</li>
+</ol>
+<div class="tip"><strong>Interview line:</strong> centralized handling with <code>@RestControllerAdvice</code> keeps controllers clean and gives every API a consistent error format.</div>
+
+<h2 id="ways">2. Ways to handle exceptions</h2>
+<div class="tw"><table>
+<tr><th>Approach</th><th>Scope</th><th>Use when</th></tr>
+<tr><td><code>try-catch</code> in controller</td><td>One method</td><td>Rarely; clutters code</td></tr>
+<tr><td><code>@ExceptionHandler</code> in controller</td><td>One controller</td><td>Controller-specific errors</td></tr>
+<tr><td><code>@ControllerAdvice</code> / <code>@RestControllerAdvice</code></td><td>Global</td><td><strong>Best practice</strong></td></tr>
+<tr><td><code>@ResponseStatus</code> on exception class</td><td>That exception</td><td>Simple status mapping</td></tr>
+<tr><td><code>ResponseStatusException</code></td><td>One throw site</td><td>Quick, no custom class</td></tr>
+<tr><td><code>ErrorController</code> / <code>ErrorAttributes</code></td><td>Container-level errors</td><td>Customizing <code>/error</code></td></tr>
+</table></div>
+
+<h2 id="global">3. Custom exception and global handler</h2>
+<pre><code>public class ResourceNotFoundException extends RuntimeException {
+    public ResourceNotFoundException(String message) { super(message); }
+}
+
+public record ErrorResponse(Instant timestamp, int status, String code,
+                            String message, String path, Map&lt;String, String&gt; errors) {}</code></pre>
+<pre><code>@RestControllerAdvice
+@Slf4j
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleNotFound(ResourceNotFoundException ex,
+                                                        HttpServletRequest req) {
+        return build(HttpStatus.NOT_FOUND, "NOT_FOUND", ex.getMessage(), req, null);
+    }
+
+    // @Valid on @RequestBody fails
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleValidation(MethodArgumentNotValidException ex,
+                                                          HttpServletRequest req) {
+        Map&lt;String, String&gt; errors = new LinkedHashMap&lt;&gt;();
+        ex.getBindingResult().getFieldErrors()
+          .forEach(f -&gt; errors.put(f.getField(), f.getDefaultMessage()));
+        return build(HttpStatus.BAD_REQUEST, "VALIDATION_FAILED", "Invalid request", req, errors);
+    }
+
+    // @Validated on @PathVariable / @RequestParam fails
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleConstraint(ConstraintViolationException ex,
+                                                          HttpServletRequest req) {
+        return build(HttpStatus.BAD_REQUEST, "CONSTRAINT_VIOLATION", ex.getMessage(), req, null);
+    }
+
+    // Fallback: never leak stack traces to clients
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleAll(Exception ex, HttpServletRequest req) {
+        log.error("Unhandled exception", ex);
+        return build(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_ERROR",
+                     "Something went wrong", req, null);
+    }
+
+    private ResponseEntity&lt;ErrorResponse&gt; build(HttpStatus s, String code, String msg,
+                                                HttpServletRequest req, Map&lt;String, String&gt; errors) {
+        return ResponseEntity.status(s).body(
+            new ErrorResponse(Instant.now(), s.value(), code, msg, req.getRequestURI(), errors));
+    }
+}</code></pre>
+<p>Spring picks the <strong>most specific</strong> matching handler, so <code>ResourceNotFoundException</code> wins over <code>Exception</code>.</p>
+
+<h2 id="valid">4. Custom validation annotation</h2>
+<p>The most common meaning of “custom annotation” in interviews.</p>
+<pre><code>@Documented
+@Constraint(validatedBy = AgeValidator.class)
+@Target({ElementType.FIELD, ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ValidAge {
+    String message() default "Age must be 18 or above";
+    int min() default 18;
+    Class&lt;?&gt;[] groups() default {};
+    Class&lt;? extends Payload&gt;[] payload() default {};
+}</code></pre>
+<pre><code>public class AgeValidator implements ConstraintValidator&lt;ValidAge, Integer&gt; {
+    private int min;
+
+    @Override
+    public void initialize(ValidAge ann) { this.min = ann.min(); }
+
+    @Override
+    public boolean isValid(Integer age, ConstraintValidatorContext ctx) {
+        return age != null &amp;&amp; age &gt;= min;
+    }
+}</code></pre>
+<pre><code>public class UserRequest {
+    @NotBlank(message = "Name is required")
+    private String name;
+
+    @ValidAge
+    private Integer age;
+}
+
+@PostMapping("/users")
+public ResponseEntity&lt;String&gt; create(@Valid @RequestBody UserRequest req) { ... }</code></pre>
+<p>If age is 15, Spring throws <code>MethodArgumentNotValidException</code> and the handler above returns a 400 with <code>{"errors": {"age": "Age must be 18 or above"}}</code>.</p>
+
+<h2 id="apierr">5. Annotation-driven exception mapping</h2>
+<p>Put the HTTP status and error code on the exception class itself, and let one handler read it.</p>
+<pre><code>@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ApiError {
+    HttpStatus status() default HttpStatus.INTERNAL_SERVER_ERROR;
+    String code();
+}
+
+public abstract class AppException extends RuntimeException {
+    protected AppException(String msg) { super(msg); }
+}
+
+@ApiError(status = HttpStatus.NOT_FOUND, code = "USER_NOT_FOUND")
+public class UserNotFoundException extends AppException {
+    public UserNotFoundException(Long id) { super("User not found: " + id); }
+}
+
+@ApiError(status = HttpStatus.CONFLICT, code = "EMAIL_EXISTS")
+public class EmailAlreadyExistsException extends AppException { ... }</code></pre>
+<pre><code>@ExceptionHandler(AppException.class)
+public ResponseEntity&lt;ErrorResponse&gt; handleApp(AppException ex, HttpServletRequest req) {
+    ApiError meta = AnnotatedElementUtils.findMergedAnnotation(ex.getClass(), ApiError.class);
+    HttpStatus status = meta != null ? meta.status() : HttpStatus.INTERNAL_SERVER_ERROR;
+    String code = meta != null ? meta.code() : "APP_ERROR";
+    return build(status, code, ex.getMessage(), req, null);
+}</code></pre>
+<p>A new error is now one small annotated class, and the handler never changes. Key ideas: <code>@Retention(RUNTIME)</code> makes the annotation readable by reflection, and <code>@Target(TYPE)</code> limits it to classes.</p>
+
+<h2 id="cheat">6. Annotation cheat sheet</h2>
+<h3>Handling</h3>
+<div class="tw"><table>
+<tr><th>Annotation</th><th>Meaning</th></tr>
+<tr><td><code>@ExceptionHandler</code></td><td>Marks a method that handles specific exception types. Can take the exception, <code>HttpServletRequest</code> or <code>WebRequest</code> as parameters.</td></tr>
+<tr><td><code>@ControllerAdvice</code></td><td>Global component whose <code>@ExceptionHandler</code>, <code>@InitBinder</code> and <code>@ModelAttribute</code> methods apply to all controllers. Narrow with <code>basePackages</code>, <code>assignableTypes</code> or <code>annotations</code>.</td></tr>
+<tr><td><code>@RestControllerAdvice</code></td><td><code>@ControllerAdvice</code> + <code>@ResponseBody</code>, so return values become JSON.</td></tr>
+<tr><td><code>@ResponseStatus</code></td><td>Sets the HTTP status on an exception class or handler method. Fixed status, no dynamic body.</td></tr>
+<tr><td><code>@ResponseBody</code></td><td>Writes the return value to the response body.</td></tr>
+<tr><td><code>@Order</code> / <code>@Priority</code></td><td>Ordering when you have multiple advice classes.</td></tr>
+</table></div>
+<h3>Validation</h3>
+<div class="tw"><table>
+<tr><th>Annotation</th><th>Meaning</th></tr>
+<tr><td><code>@Valid</code></td><td>Triggers bean validation on a <code>@RequestBody</code> or nested object. Failure throws <code>MethodArgumentNotValidException</code>.</td></tr>
+<tr><td><code>@Validated</code></td><td>Spring's variant. On a class it enables validation of <code>@PathVariable</code> and <code>@RequestParam</code> (throws <code>ConstraintViolationException</code>). Supports validation groups.</td></tr>
+<tr><td><code>@NotNull</code>, <code>@NotBlank</code>, <code>@NotEmpty</code></td><td>Not null; not null, empty or whitespace (strings); not null or empty (collections and strings).</td></tr>
+<tr><td><code>@Size</code>, <code>@Min</code>, <code>@Max</code>, <code>@Email</code>, <code>@Pattern</code></td><td>Size, number range, email format, regex.</td></tr>
+<tr><td><code>@Constraint</code></td><td>Marks an annotation as a validation constraint and links it to its validator.</td></tr>
+</table></div>
+<h3>Web and meta</h3>
+<div class="tw"><table>
+<tr><th>Annotation</th><th>Meaning</th></tr>
+<tr><td><code>@RestController</code></td><td><code>@Controller</code> + <code>@ResponseBody</code>.</td></tr>
+<tr><td><code>@RequestBody</code>, <code>@PathVariable</code>, <code>@RequestParam</code></td><td>Bind the body, URL segment or query parameter.</td></tr>
+<tr><td><code>@Retention</code></td><td>How long a custom annotation lives (<code>SOURCE</code>, <code>CLASS</code>, <code>RUNTIME</code>). Use <code>RUNTIME</code> for reflection or validation.</td></tr>
+<tr><td><code>@Target</code></td><td>Where it can be placed (<code>TYPE</code>, <code>METHOD</code>, <code>FIELD</code>, <code>PARAMETER</code>).</td></tr>
+<tr><td><code>@Documented</code>, <code>@Inherited</code></td><td>Include in Javadoc; subclasses inherit a class-level annotation.</td></tr>
+<tr><td><code>@Slf4j</code> (Lombok)</td><td>Generates a <code>log</code> field.</td></tr>
+<tr><td><code>@Transactional</code></td><td>Rolls back on unchecked exceptions by default. Use <code>rollbackFor = Exception.class</code> for checked ones.</td></tr>
+</table></div>
+
+<h2 id="qa">7. Interview questions</h2>
+<details><summary>@ControllerAdvice vs. @RestControllerAdvice?</summary><p>The second includes <code>@ResponseBody</code>, so handlers return JSON without annotating each method.</p></details>
+<details><summary>@ExceptionHandler in a controller vs. in advice?</summary><p>In a controller it applies to that controller only. In advice it is global. A controller-level handler takes precedence for its own controller.</p></details>
+<details><summary>@Valid vs. @Validated?</summary><p><code>@Valid</code> is the Jakarta standard and cascades into nested objects. <code>@Validated</code> is Spring's, supports groups, and enables method-level validation when placed on a class.</p></details>
+<details><summary>Which exception does a failed @Valid @RequestBody throw?</summary><p><code>MethodArgumentNotValidException</code>. Failed <code>@Validated</code> path or query parameters throw <code>ConstraintViolationException</code>.</p></details>
+<details><summary>Checked or unchecked for custom business exceptions?</summary><p>Usually unchecked (<code>RuntimeException</code>): <code>@Transactional</code> rolls back on them by default and you avoid <code>throws</code> clutter.</p></details>
+<details><summary>What happens if no handler matches?</summary><p>It falls through to <code>BasicErrorController</code> at <code>/error</code>.</p></details>
+<details><summary>How do you avoid leaking internals?</summary><p>Add a fallback <code>@ExceptionHandler(Exception.class)</code> that logs the stack trace and returns a generic message.</p></details>
+<details><summary>What is ProblemDetail?</summary><p>Spring 6 / Boot 3 supports RFC 7807 (<code>application/problem+json</code>). Return <code>ProblemDetail</code>, or extend <code>ResponseEntityExceptionHandler</code> for standard handling of Spring MVC's own exceptions.</p></details>
+<details><summary>How do you handle exceptions thrown in filters?</summary><p><code>@ControllerAdvice</code> can't catch them because filters run before <code>DispatcherServlet</code>. Catch them in the filter, or delegate to a <code>HandlerExceptionResolver</code>.</p></details>
+
+<div class="tip"><strong>Best practices:</strong> one global handler, a consistent error body, specific exception types, a generic fallback, and never expose stack traces to clients.</div>
+</div>
+<script>
+document.querySelectorAll(".sb pre").forEach(function(p){
+  var b=document.createElement("button");b.textContent="Copy";
+  b.onclick=function(){
+    var t=p.querySelector("code").innerText;
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent="Copied!"},function(){b.textContent="Press Ctrl+C"});
+    setTimeout(function(){b.textContent="Copy"},1400);
+  };
+  p.appendChild(b);
+});
+</script>
+</body>
+</html>

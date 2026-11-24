@@ -1,5 +1,6 @@
 package com.dsa.arrays.map;
 
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -358,7 +359,7 @@ public class MapQuestion {
         }
     }
 
-    public static class FirstRepeatedWord {
+    public static class FirstNOnRepeatedWord {
         public static void main(String[] args) {
             String str = "Java is fun and java is popular";
             String map = firstRepeatedWord(str);
@@ -571,6 +572,8 @@ public class MapQuestion {
         }
     }
 
+
+
     public static class MergeTwoSortedElements {
 
         public static void main(String[] args) {
@@ -578,6 +581,13 @@ public class MapQuestion {
             int[] arr1 = {1, 3, 5, 6};
             int[] arr2 = {2, 3, 6, 8};
 
+            // Approach 1: Java 8 Streams
+            int[] result = mergeTwoSortedElementsJava8(arr1, arr2);
+
+            System.out.println("Merged f lJava 8 Streams:");
+            System.out.println(Arrays.toString(result));
+
+            // Approach 2: HashMap
             Map<Integer, Integer> map = new HashMap<>();
 
             // Add elements of first array
@@ -590,8 +600,8 @@ public class MapQuestion {
                 map.put(num, map.getOrDefault(num, 0) + 1);
             }
 
-            // Print merged result (unordered)
             System.out.println("Merged using HashMap:");
+
             for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
                 int key = entry.getKey();
                 int count = entry.getValue();
@@ -601,13 +611,16 @@ public class MapQuestion {
                 }
             }
         }
-    }
 
-    private static int[] mergeTwoSortedElementsJava8(int[] arr1, int[] arr2) {
+        private static int[] mergeTwoSortedElementsJava8(
+                int[] arr1, int[] arr2) {
 
-        return IntStream.concat(Arrays.stream(arr1), Arrays.stream(arr2)) // join streams
-                .sorted()                                                 // sort values
-                .toArray();                                               // convert to array
+            return IntStream.concat(
+                            Arrays.stream(arr1),
+                            Arrays.stream(arr2))
+                    .sorted()
+                    .toArray();
+        }
     }
 
 }

@@ -1,0 +1,187 @@
+<div class="java-blog">
+<style>
+.java-blog{max-width:850px;margin:auto;font:16px/1.65 Arial,sans-serif;color:#222}
+.java-blog h1,.java-blog h2{color:#1769aa}
+.java-blog .topic{border:1px solid #e1e7ef;border-radius:8px;padding:15px;margin:18px 0}
+.java-blog pre{background:#f6f8fa;border:1px solid #e1e6ec;border-radius:5px;padding:12px;overflow:auto;font:14px/1.55 Consolas,monospace}
+.java-blog .code-head{display:flex;justify-content:space-between;align-items:center;background:#edf3f8;padding:7px 10px;border-radius:5px 5px 0 0;font-size:13px}
+.java-blog .code-head+pre{border-radius:0 0 5px 5px;margin-top:0}
+.java-blog button{background:#1769aa;color:#fff;border:0;border-radius:4px;padding:6px 10px;cursor:pointer}
+.java-blog .output{background:#eef9f1;border-left:4px solid #299653;padding:10px 12px;margin:10px 0}
+.java-blog .note{background:#fff8e8;border-left:4px solid #d99a20;padding:10px 12px;margin:10px 0}
+.java-blog table{border-collapse:collapse;width:100%;margin:12px 0}
+.java-blog th,.java-blog td{border:1px solid #ddd;padding:9px;text-align:left;vertical-align:top}
+.java-blog th{background:#f1f5f9}
+.java-blog summary{cursor:pointer;color:#1769aa;font-weight:bold}
+@media(max-width:600px){.java-blog .topic{padding:11px}.java-blog h1{font-size:27px}}
+</style>
+
+<h1>Java Try-with-Resources: Interview Questions and Answers</h1>
+<p><code>try-with-resources</code> is a Java feature that automatically closes resources such as files, streams, and database connections after use.</p>
+
+<div class="topic">
+<h2>1. What is try-with-resources? When was it introduced?</h2>
+<p>It is a <code>try</code> statement that automatically closes resources when the block finishes. It was introduced in <strong>Java 7</strong>. Resources must implement <code>AutoCloseable</code> (or <code>Closeable</code>).</p>
+<div class="code-head"><span>Example</span><button onclick="copyJavaCode(this)">Copy code</button></div>
+<pre><code>import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Main {
+    public static void main(String[] args) {
+        try (BufferedReader reader =
+                 new BufferedReader(new FileReader("data.txt"))) {
+            System.out.println(reader.readLine());
+        } catch (IOException e) {
+            System.out.println("File error: " + e.getMessage());
+        }
+    }
+}</code></pre>
+<p>The reader is closed automatically after the try block, even if an exception occurs.</p>
+</div>
+
+<div class="topic">
+<h2>2. What are the benefits of try-with-resources?</h2>
+<ul>
+<li>Automatically closes resources.</li>
+<li>Reduces boilerplate code compared with a manual <code>finally</code> block.</li>
+<li>Helps prevent resource leaks.</li>
+<li>Handles exceptions raised while closing resources.</li>
+<li>Makes code easier to read and maintain.</li>
+</ul>
+</div>
+
+<div class="topic">
+<h2>3. What improvements were made to try-with-resources in Java 9?</h2>
+<p>Java 9 allows an effectively final variable that already exists to be used directly as a resource in the try-with-resources header. In Java 7 and 8, the resource generally had to be declared inside the parentheses.</p>
+<div class="code-head"><span>Java 9+ example</span><button onclick="copyJavaCode(this)">Copy code</button></div>
+<pre><code>import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader reader =
+            new BufferedReader(new FileReader("data.txt"));
+
+        try (reader) {
+            System.out.println(reader.readLine());
+        }
+    }
+}</code></pre>
+<div class="note">The variable must be final or effectively final: it must not be reassigned after initialization.</div>
+</div>
+
+<div class="topic">
+<h2>4. What exception-handling improvements came with Java 7?</h2>
+<ul>
+<li><strong>Try-with-resources:</strong> automatically closes resources.</li>
+<li><strong>Multi-catch:</strong> catches multiple exception types in one catch block using <code>|</code>.</li>
+<li><strong>More precise rethrow:</strong> the compiler can infer more specific exception types when a caught exception is rethrown.</li>
+</ul>
+<div class="code-head"><span>Multi-catch example</span><button onclick="copyJavaCode(this)">Copy code</button></div>
+<pre><code>try {
+    // code that may throw either exception
+} catch (IllegalArgumentException | NullPointerException e) {
+    System.out.println("Invalid input");
+}</code></pre>
+</div>
+
+<div class="topic">
+<h2>5. Why is resource cleanup important?</h2>
+<p>Resources such as file handles, streams, sockets, and database connections use operating-system or external-system resources. If they are not closed, the application can leak resources and eventually fail to open more files or connections.</p>
+<p>Before Java 7, developers often closed resources in <code>finally</code>. With try-with-resources, automatic closing is usually simpler and safer.</p>
+</div>
+
+<div class="topic">
+<h2>6. Without try-with-resources vs. with try-with-resources</h2>
+<h3>Without try-with-resources</h3>
+<div class="code-head"><span>Manual cleanup</span><button onclick="copyJavaCode(this)">Copy code</button></div>
+<pre><code>BufferedReader reader = null;
+try {
+    reader = new BufferedReader(new FileReader("data.txt"));
+    System.out.println(reader.readLine());
+} catch (IOException e) {
+    System.out.println("Read error");
+} finally {
+    if (reader != null) {
+        try {
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("Close error");
+        }
+    }
+}</code></pre>
+<h3>With try-with-resources</h3>
+<div class="code-head"><span>Automatic cleanup</span><button onclick="copyJavaCode(this)">Copy code</button></div>
+<pre><code>try (BufferedReader reader =
+         new BufferedReader(new FileReader("data.txt"))) {
+    System.out.println(reader.readLine());
+} catch (IOException e) {
+    System.out.println("File error");
+}</code></pre>
+<p>The second version is shorter and automatically closes the reader.</p>
+</div>
+
+<div class="topic">
+<h2>7. What happens if both the try block and close() throw exceptions?</h2>
+<p>If the try block throws the main exception and closing the resource also throws an exception, the try-block exception is propagated. The close exception is recorded as a <strong>suppressed exception</strong>.</p>
+<div class="code-head"><span>Example</span><button onclick="copyJavaCode(this)">Copy code</button></div>
+<pre><code>class MyResource implements AutoCloseable {
+    public void close() throws Exception {
+        throw new Exception("Close failed");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        try (MyResource r = new MyResource()) {
+            throw new Exception("Work failed");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getSuppressed()[0].getMessage());
+        }
+    }
+}</code></pre>
+<div class="output"><strong>Output</strong><br><code>Work failed<br>Close failed</code></div>
+</div>
+
+<div class="topic">
+<h2>Quick interview revision</h2>
+<table>
+<thead><tr><th>Question</th><th>Short answer</th></tr></thead>
+<tbody>
+<tr><td>Introduced in which Java version?</td><td>Java 7</td></tr>
+<tr><td>Which interface is required?</td><td><code>AutoCloseable</code> or <code>Closeable</code></td></tr>
+<tr><td>When is the resource closed?</td><td>Automatically when control leaves the try-with-resources statement</td></tr>
+<tr><td>Can multiple resources be declared?</td><td>Yes; they close in reverse order of declaration</td></tr>
+<tr><td>What is a suppressed exception?</td><td>An additional exception, often from closing a resource, suppressed behind the primary exception</td></tr>
+<tr><td>What changed in Java 9?</td><td>Effectively final existing variables can be used as resources</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="topic">
+<h2>Practice questions</h2>
+<p><strong>Q1.</strong> Does try-with-resources close a resource if an exception occurs?</p>
+<details><summary>Show answer</summary><p>Yes. Java attempts to close the resource as the try-with-resources statement exits.</p></details>
+<p><strong>Q2.</strong> In what order are multiple resources closed?</p>
+<details><summary>Show answer</summary><p>In reverse order of declaration.</p></details>
+<p><strong>Q3.</strong> Can a custom class be used in try-with-resources?</p>
+<details><summary>Show answer</summary><p>Yes, if it implements <code>AutoCloseable</code> or <code>Closeable</code> and provides the required <code>close()</code> method.</p></details>
+</div>
+
+<script>
+function copyJavaCode(button) {
+  var code = button.parentElement.nextElementSibling.innerText;
+  var area = document.createElement('textarea');
+  area.value = code;
+  document.body.appendChild(area);
+  area.select();
+  try { document.execCommand('copy'); button.innerText = 'Copied!'; }
+  catch (e) { button.innerText = 'Copy manually'; }
+  area.remove();
+  setTimeout(function(){ button.innerText = 'Copy code'; }, 1200);
+}
+</script>
+</div>
